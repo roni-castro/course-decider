@@ -14,6 +14,15 @@ class MainActivity : AppCompatActivity() {
 
         supportActionBar?.title = getString(R.string.app_name)
 
+        addFoodBtn.setOnClickListener {
+            val newFoodPlace = newFoodEditText.text.toString()
+            if(isValidFoodPlace(newFoodPlace)){
+                addNewFoodPlace(newFoodPlace)
+                showToast(newFoodPlace + " was successfully added to the list")
+                newFoodEditText.text.clear()
+            }
+        }
+
         decideBtn.setOnClickListener{
             if(!foodPlaces.isEmpty()){
                 decide()
@@ -22,7 +31,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-    
+
     private fun decide(){
         val decidedFoodPlace = getRandomFood()
         foodPlaceDecided.text = decidedFoodPlace
@@ -37,6 +46,24 @@ class MainActivity : AppCompatActivity() {
             }
             else -> ""
         }
+    }
+
+    private fun isValidFoodPlace(newFoodPlace: String):Boolean{
+        return when {
+            newFoodPlace.isEmpty() -> {
+                showToast("Food place cannot be empty")
+                false
+            }
+            foodPlaces.contains(newFoodPlace) -> {
+                showToast(newFoodPlace + " was already added to the array")
+                false
+            }
+            else -> true
+        }
+    }
+
+    private fun addNewFoodPlace(place: String){
+        foodPlaces.add(place)
     }
 
     private fun showToast(message: String){
